@@ -1,0 +1,89 @@
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+      <div class="col-lg-4 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info">
+          <div class="inner">
+            <h3>{{regob}}</h3>
+
+            <p>Registered Office Bearers</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div>
+          <!-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-4 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success">
+          <div class="inner">
+            <h3>{{appob}}
+               <!-- <sup style="font-size: 20px">%</sup> -->
+              </h3> 
+
+            <p>Approved Office Bearers</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div>
+          <!-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+        </div>
+      </div>
+      <div class="col-lg-4 col-6">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+          <div class="inner">
+            <h3>{{activeob}}
+              <!-- <sup style="font-size: 20px">%</sup> -->
+            </h3>
+
+            <p>Active Office Bearers</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div>
+          <!-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+        </div>
+      </div>
+      <!-- <div>
+        <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'360px'}"></canvasjs-chart>    
+      </div>   -->
+    </div>
+    <div class="row h-auto justify-content-around"  *ngIf="barchat!=''" style="gap: 10px;">
+      <div class="col" >
+       <!-- Applications Overview Bar chart -->
+         <div class="card shadow h-100">
+             <div class="card-header" >
+                 <h6 class="m-0 font-weight-bold text-primary">District-wise Engineers Overview</h6>
+             </div>
+             <div class="card-body" >
+                 <div >
+                     <canvas  id="MyChart" ></canvas>
+                 </div>
+             </div>
+         </div>
+       </div>
+       <div class="col">
+           <div class="card shadow h-100">
+             <div class="card-header" >
+                 <h6 class="m-0 font-weight-bold text-primary">Branch-wise Engineers</h6>
+             </div>
+             <div class="card-body" >
+                 <div>
+                   <canvas id="canvas"></canvas>
+                 </div>
+             </div>
+           </div>
+       </div>
+     
+    </div>
+   <div class="text-secondary text-center"  *ngIf="barchat==''"><h3><b>NO DATA FOUND FOR GRAPHS</b></h3></div>
+   
+ </div>
+</section>
+<!-- /.content -->

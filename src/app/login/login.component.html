@@ -1,0 +1,93 @@
+<div *ngIf="spinner==true">
+  <ngx-spinner  size="medium"  type="timer" >
+      <p style="font-size: 20px; color: white;padding-left:7%;">Loading...</p>
+  </ngx-spinner>
+</div>
+<div class="hold-transition login-page">
+  <div class="login-box">
+      
+      <!-- /.login-logo -->
+      <div class="card">
+        <div class="login-logo">
+          <a>Welcome to <b>DMK Engineers Wing</b> Portal</a>
+          <div>
+            <img src="assets/dmk.png" alt="Logo" class="" style="opacity: .8;width: 80px;">
+          </div>
+        </div>
+        <div class="card-body login-card-body">
+          <form [formGroup]="userForm" (ngSubmit)="postdata(userForm)">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Phone Number" formControlName="whatsapp_no" maxlength="10"  (keyup)="getlogincheck(userForm.get('whatsapp_no').value)">
+              
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-phone"></span>
+                  
+                </div>
+              </div>                 
+            </div>
+            <!-- <div  class="invalid-msg" *ngIf="test_ph=='true' && userForm.get('whatsapp_no').value !=''&& userForm.get('whatsapp_no').hasError('pattern') && userForm.get('whatsapp_no').touched" >user name is in correct </div>     -->
+            <div *ngIf="test_ph=='true' && userForm.get('whatsapp_no').status=='VALID'&& userForm.get('whatsapp_no').touched==true && userForm.get('whatsapp_no').value!=''" class="invalid-msg">
+              Username is incorrect</div>
+              <div *ngIf="test_ph=='true' && userForm.get('whatsapp_no').status=='INVALID'&& userForm.get('whatsapp_no').touched==true && userForm.get('whatsapp_no').value!=''" class="invalid-msg">
+                Username is incorrect</div>
+            <div class="input-group mb-3">
+              <input type="password" class="form-control" placeholder="Password"  formControlName="password">
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-lock"></span>
+                </div>
+              </div>
+            </div>
+            <!-- <div *ngIf=" userForm.get('password').status=='VALID'&& userForm.get('password').touched==true && userForm.get('password').value !=''" class="invalid-msg">
+               please enter password</div>
+               <div *ngIf=" userForm.get('password').status=='INVALID'&& userForm.get('password').touched==true && userForm.get('password').value !=''" class="invalid-msg">
+                please enter password</div> -->
+            <div class="row">
+              <!-- <div class="col-8">
+                <div class="icheck-primary">
+                  <input type="checkbox" id="remember">
+                  <label for="remember">
+                    Remember Me
+                  </label>
+                </div>
+              </div> -->
+              <!-- /.col -->
+              <div>
+                <!-- <a href="#" class="btn btn-block btn-primary">
+                  <i class="fab fa-facebook mr-2"></i> Sign In
+                </a>
+                <button type="submit" [routerLink]="['superadmin']" class="btn btn-primary btn-block"></button> -->
+              </div>
+              <!-- /.col -->
+            </div>
+  
+            <button class="btn btn-block btn-primary" [disabled]="btnDisable" >Sign in</button>
+            <!-- <div *ngIf="btnDisable==true">
+              Your three attempt is completed. Your account was blocked 
+            </div> -->
+  
+          </form>
+    
+          <div class="social-auth-links text-center mb-3">
+            <!-- <p>- OR -</p> -->
+            <!-- <a [routerLink]="['superadmin']" class="btn btn-block btn-primary">
+              <i ></i> Sign in 
+            </a> -->
+            <!-- <a href="#" class="btn btn-block btn-danger">
+              <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+            </a> -->
+          </div>
+          <!-- /.social-auth-links -->
+    
+          <p class="mb-1 text-center">
+            <a [routerLink]="['forgot_password']" >Forgot password</a>
+          </p>
+          <p class="mb-0 text-center">
+            <a [routerLink]="['self-registration']" class="text-center">Self-Registration</a>
+          </p>
+        </div>
+        <!-- /.login-card-body -->
+      </div>
+    </div>
+  </div>

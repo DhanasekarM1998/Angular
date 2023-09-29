@@ -1,0 +1,203 @@
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <!-- Small boxes (Stat box) -->
+    <!-- <div class="row">
+      <div class="col-lg-4 col-6"> -->
+        <!-- small box -->
+        <!-- <div class="small-box bg-info">
+          <div class="inner">
+            <h3>{{regob}}</h3>
+
+            <p>Registered Office Bearers</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div> -->
+          <!-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+        <!-- </div>
+      </div> -->
+      <!-- ./col -->
+      <!-- <div class="col-lg-4 col-6"> -->
+        <!-- small box -->
+        <!-- <div class="small-box bg-success"> -->
+          <!-- <div class="inner">
+            <h3>{{appob}} -->
+              <!-- <sup style="font-size: 20px">%</sup> -->
+            <!-- </h3> -->
+
+            <!-- <p>Approved Office Bearers</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div> -->
+          <!-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+        <!-- </div>
+      </div>
+      <div class="col-lg-4 col-6"> -->
+        <!-- small box -->
+        <!-- <div class="small-box bg-warning">
+          <div class="inner">
+            <h3>{{activeob}} -->
+              <!-- <sup style="font-size: 20px">%</sup> -->
+            <!-- </h3>
+
+            <p>Active Office Bearers</p>
+          </div>
+          <div class="icon">
+            <i class="ion ion-stats-bars"></i>
+          </div> -->
+          <!-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+        <!-- </div>
+      </div> -->
+      <!-- <div>
+        <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'360px'}"></canvasjs-chart>    
+      </div>   -->
+    <!-- </div> -->
+
+    <div class="p-3">
+      <h4>Task/Activity</h4>
+      <div class="table-responsive" *ngIf="tableshow">
+        <table class="table table-bordered display" [dtOptions]="dtOptions" datatable width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Activity</th>
+              <th>Description</th>
+              <th>Date</th>
+              <th>Activity Type</th>
+              <th>Edit</th>
+            </tr>
+          </thead>
+    
+          <tbody>
+            <tr *ngFor="let customer of customers">
+              <td style="min-width: 20px;">
+                {{customer.activity}}
+              </td>
+              <!-- <td style="min-width: 20px;">
+                            {{customer.designation}}
+                            </td> -->
+              <!-- <td style="min-width: 20px;">
+                            {{customer.applied_role}}
+                            </td> -->
+              <!-- <td style="min-width: 20px;">
+                            {{customer.approval_status}}
+                            </td> -->
+              <td style="min-width: 20px;">
+                {{customer.description}}
+              </td>
+              <td style="min-width: 20px;">
+                {{customer.date}} {{customer.time}}
+              </td>
+              <td style="min-width: 20px;">
+                {{customer.activity_type}}
+              </td>
+    
+                  <td><button data-toggle="modal" (click)="handleEdit(customer)" data-target="#showCM" [disabled]="customer.status=='cancel'"
+                      class="btn btn-info btn-circle btn-sm">
+                      <i class="fas fa-check"></i>
+                    </button></td>
+             
+                  <ng-template #notShow>
+                    <a *ngIf="customer.status=='cancel'">
+                      Cancelled
+        
+                    </a>
+                  </ng-template>
+            </tr>
+          </tbody>
+    
+        </table>
+      </div>
+    </div>
+    <div class="modal fade" id="showCM">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="card-danger">
+            <div class="card-header">
+              <h3 class="card-title">TASK INFORMATION</h3>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="card-body">
+              <form class="register-form"  [formGroup]='createmeetingform' (ngSubmit)="postdata(createmeetingform)"
+                autocomplete="off">
+             
+        <div class="form-group row" >
+              <div class="col-sm-6 mb-3 mb-sm-0">
+                <label>Username / பயனர் பெயர்</label><span class="required "> *</span>
+                <input pInputText type="text" class="form-control" placeholder="Enter Username / பயனர் பெயர்" [value]="user_name"
+                  readonly="readonly">
+              
+              </div>
+                <input pInputText type="hidden" style="display: none;"  [value]="user_activity_id"
+                  readonly="readonly">
+          <div class="col-sm-6">
+            <label>OB Status / OB நிலை</label><span class="required "> *</span>
+            <input pInputText type="text" class="form-control" formControlName="ob_status" [value]='ob_status'  [(ngModel)]="ob_status" readonly value="Completed"
+              placeholder="OB Status / OB நிலை">
+        
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <label class="form-label">OB Comments/ OB கருத்துகள்</label><span class="required "> *</span>
+            <textarea formControlName="ob_comments" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <label class="form-label">OB Pictures/ OB படங்கள்</label>
+            <input type="file" id="file" multiple class="form-control" (change)="selectFiles($event)" formControlName="ob_pictures" />
+          </div>
+        </div>
+        
+        <div id="list" >
+          <h6 id="title" style="display:none">List of images</h6>
+
+        </div>
+        <br/>
+              
+                  <div  class="d-flex justify-content-center">
+                    <div style="width:200px">
+                      <button class="btn btn-danger btn btn-block">Update Activity</button>
+                    </div>
+                  </div>
+    
+    
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="barchat!=''">
+      <!-- Applications Overview Bar chart -->
+      <div class="card shadow mb-8" >
+          <div class="card-header py-3"  >
+              <h6 class="m-0 font-weight-bold text-primary">Monthwise Engineers join</h6>
+          </div>
+          <div class="card-body" >
+              <div class="chart-bar" style="width:500px">
+                  <canvas  id="MyChart" >{{ chart }}</canvas>
+              </div>
+          </div>
+      </div>
+      <div class="card shadow mb-8 ml-3">
+        <div class="card-header py-3" >
+            <h6 class="m-0 font-weight-bold text-primary">Branchwise Engineers</h6>
+        </div>
+        <div class="card-body" >
+            <div style="width:400px">
+              <canvas id="canvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    
+      
+   </div>
+   <!-- <div class="text-secondary text-center"  *ngIf="barchat==''"><h3><b>NO DATA FOUND FOR GRAPHS</b></h3></div> -->
+   
+ </div>
+</section>
+<!-- /.content -->

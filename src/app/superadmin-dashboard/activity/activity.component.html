@@ -1,0 +1,345 @@
+<div *ngIf="spinner==true">
+    <ngx-spinner size="medium" type="timer">
+        <p style="font-size: 20px; color: white;padding-left:7%;">Loading...</p>
+    </ngx-spinner>
+</div>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <h4 class="font-weight-bold text-dark py">ACTIVITY/TASK</h4>
+                <div style="width:120px">
+                    <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#myModal"
+                        (click)="setCurrentdate()">Add</button>
+                </div>
+            </div>
+
+        </div>
+        <div *ngIf="!tableshow" class="d-flex justify-content-center">
+            <div class="loader"></div>
+        </div>
+
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="card-danger">
+                        <div class="card-header">
+                            <h3 class="card-title">CREATE ACTIVITY/TASK</h3>
+                            <button type="button" class="close" data-dismiss="modal"
+                                (click)="Formreset()">&times;</button>
+                        </div>
+
+                        <div class="card-body">
+                            <form class="register-form" [formGroup]='createmeetingform'
+                                (ngSubmit)="postdata(createmeetingform)" autocomplete="off">
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label>Username / பயனர் பெயர்</label><span class="required "> *</span>
+                                        <input pInputText type="text" class="form-control"
+                                            formControlName="user_name"
+                                            [(ngModel)]="user_name"
+                                            readonly
+                                            placeholder="Enter Username / பயனர் பெயர்">
+
+                                    </div>              
+                                </div>
+                                <input pInputText type="text" class="form-control" formControlName="user_id" [(ngModel)]="user_id" readonly
+                                    placeholder="Enter UserId" style="display:none">
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label>Activity Date / இடுபணி தேதி<span class="required "> *</span></label>
+                                        <input type="date" formControlName="activity_date" class="form-control"
+                                            placeholder="Enter Activity Date / இடுபணி தேதி" required
+                                            min="{{date | date:'yyyy-MM-dd'}}">
+                                        <!-- <div  *ngIf="(createmeetingform.get('meeting_date').touched && createmeetingform.get('meeting_date').value=='')"
+                                  class="invalid-msg" >Please fill this field</div> -->
+                                        <!-- <div  class="invalid-msg" *ngIf="createmeetingform.get('meeting_date').untouched" [hidden]='hidden'>Please fill this field</div> -->
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Activity Time / இடுபணி நேரம்<span class="required "> *</span></label>
+                                        <input type="time" class="form-control" formControlName="activity_time"
+                                            placeholder="Enter Activity Time / இடுபணி நேரம்" required>
+                                        <!-- <div  *ngIf="(createmeetingform.get('meeting_time').touched && createmeetingform.get('meeting_time').value=='')"
+                            class="invalid-msg" >Please fill this field</div> -->
+                                        <!-- <div  class="invalid-msg" *ngIf="createmeetingform.get('meeting_time').untouched" [hidden]='hidden'>Please fill this field</div> -->
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                    <label>Activity / இடுபணி <span class="required "> *</span></label>
+                                    <input pInputText type="text" class="form-control" formControlName="activity" placeholder="Enter Activity / இடுபணி" required>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Assigned To / இவர்களுக்கு ஒதுக்கப்பட்டது <span class="required "> *</span></label>
+                                        <select type="text" class="form-control" #mySelect (change)="getChangeAssignedTo(mySelect.value);" formControlName="assigned_to" placeholder="Assigned To / இவர்களுக்கு ஒதுக்கப்பட்டது">
+                                            <option value="all_district" >All District</option>
+                                            <option value="district">District</option>
+                                            <option value="zone">Zone</option>
+                                            </select>
+                                    </div>
+                                </div>
+                                <div class="row" id="Check1" style="display:none">
+                                    <div class="col-sm-6"  >
+                                        <label>Party District / கட்சி மாவட்டம்<span class="required "> *</span></label><br>
+                                        <select class="form-control" formControlName="district" [(ngModel)]="district" #mydst (change)="getChangeToConstituey(mydst.value)" >
+                                            <option value="" selected disabled hidden>Select District</option>
+                                            <option *ngFor="let option of district_list" (value)="option">
+                                                {{option}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Assembly constituency / சட்டமன்ற தொகுதி<span class="required "> *</span></label>
+                                        <select class="form-control" formControlName="constituency" [(ngModel)]="OBConstituency">
+                                            <option value="" selected disabled>Select constituency</option>
+                                            <option *ngFor="let option of user_constituency" (value)="option">
+                                                {{option}}</option>
+                                        </select>
+                                        <!-- <div  class="invalid-msg" *ngIf="officebearerform.get('constituency').untouched" [hidden]='hidden'>Please select constituency</div> -->
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label>Activity Description/ இடுபணி விரித்துரைத்தல் <span class="required "> *</span></label>
+                                        <textarea class="form-control" formControlName="description" required ></textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                    <label>Activity Type/ இடுபணி மாதிப் படிவம் <span class="required "> *</span></label>
+                                    <select class="form-control" #activity_type (change)="handleActivityTypeChange(activity_type.value)" formControlName="activity_type" required>
+                                        <option value="Poratam">Poratam</option>
+                                        <option value="Mariyal">Mariyal</option>
+                                        <option value="Nala Thittam">Nala Thittam</option>
+                                        <option value="Others">Others</option>     
+                                    </select>                                        
+                                    </div>
+                                    <div class="col-sm-6" id="others" style="display:none">
+                                        <label>Others<span class="required "> *</span></label>
+                                        <input pInputText type="text" class="form-control" formControlName="others" placeholder="Enter Others"
+                                                                                required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label>Status/ சமுதாயப் படிநிலை <span class="required "> *</span></label>
+                                        <select class="form-control" formControlName="status" required>
+                                            <option value="Open">Open</option>
+                                            <option value="Inproress">Inprocess</option>
+                                            <option value="Completed">Completed</option>
+                                            
+                                        </select>
+                                    </div>
+                                </div>
+                                <br/>
+                              
+                                                                    
+                                <div class="d-flex justify-content-center">
+                                    <div style="width:200px">
+                                        <button class="btn btn-danger btn btn-block">Create Activity</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-3">
+            <div class="table-responsive" *ngIf="tableshow">
+                <table class="table table-bordered display" [dtOptions]="dtOptions" datatable width="100%"
+                    cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Activity</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th>Activity Type</th>
+                            <th>Show</th>
+                            <th>Edit</th>
+                            <th>Cancel</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let customer of customers">
+                            <td style="min-width: 20px;">
+                                {{customer.activity}}
+                            </td>
+                            <!-- <td style="min-width: 20px;">
+                    {{customer.designation}}
+                    </td> -->
+                            <!-- <td style="min-width: 20px;">
+                    {{customer.applied_role}}
+                    </td> -->
+                            <!-- <td style="min-width: 20px;">
+                    {{customer.approval_status}}
+                    </td> -->
+                            <td style="min-width: 20px;">
+                                {{customer.description}}
+                            </td>
+                            <td style="min-width: 20px;">
+                                {{customer.date}} {{customer.time}}
+                            </td>
+                            <td style="min-width: 20px;">
+                                {{customer.activity_type}}
+                            </td>
+
+                            <td><a data-toggle="modal" data-target="#showCM" class="btn btn-primary btn-circle btn-sm"
+                                    (click)="buttonviewmeeting(customer,'show')">
+                                    <i class="fas fa-flag"></i>
+                                </a></td>
+                            <td><button data-toggle="modal" data-target="#showCM" [disabled]="customer.status=='cancel'"
+                                    class="btn btn-info btn-circle btn-sm" (click)="buttonviewmeeting(customer,'edit')">
+                                    <i class="fas fa-check"></i>
+                                </button></td>
+                            <td><a *ngIf="customer.status=='Active';else notShow"
+                                    class="btn btn-danger btn-circle btn-sm" (click)="delete_CM(customer.id)">
+                                    <i class="fas fa-times"></i>
+                                </a></td>
+                            <ng-template #notShow>
+                                <a *ngIf="customer.status=='cancel'">
+                                    Cancelled
+
+                                </a>
+                            </ng-template>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="showCM">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="card-danger">
+                        <div class="card-header">
+                            <h3 class="card-title">TASK INFORMATION</h3>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="card-body">
+                            <form class="register-form" [formGroup]='editmeetingform'
+                                (ngSubmit)="updatedata(editmeetingform,CM_id)" autocomplete="off">
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label>Username / பயனர் பெயர்</label><span class="required "> *</span>
+                                        <input pInputText type="text" class="form-control"
+                                     placeholder="Enter Username / பயனர் பெயர்" [value]="CM_name" 
+                                            readonly="readonly">
+
+                                    </div>
+
+                                </div>
+                                <div class="form-group row" *ngIf="editfield">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label>Meeting Date / சந்திப்பு தேதி</label><span class="required "> *</span>
+                                        <input pInputText type="date" class="form-control"
+                                            formControlName="meeting_date"
+                                            placeholder="Enter Meeting Date / சந்திப்பு தேதி">
+
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Meeting Time / சந்திப்பு நேரம்</label><span class="required "> *</span>
+                                        <input pInputText type="time" class="form-control"
+                                            formControlName="meeting_time"
+                                            placeholder="Enter Meeting Time / சந்திப்பு நேரம்">
+
+                                    </div>
+                                </div>
+
+                                   <div class="form-group row" *ngIf="editfield">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label>Meeting Date / சந்திப்பு தேதி</label><span class="required "> *</span>
+                                        <input pInputText type="date" class="form-control"
+                                            formControlName="meeting_date"
+                                            placeholder="Enter Meeting Date / சந்திப்பு தேதி">
+
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Meeting Time / சந்திப்பு நேரம்</label><span class="required "> *</span>
+                                        <input pInputText type="time" class="form-control"
+                                            formControlName="meeting_time"
+                                            placeholder="Enter Meeting Time / சந்திப்பு நேரம்">
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" *ngIf="!editfield">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label>Activity Date / இடுபணி தேதி<span class="required "> *</span></label>
+                                        <input pInputText type="date" class="form-control"
+                                            formControlName="activity_date"
+                                            [value]="CM_date"
+                                            placeholder="Enter Activity Date / இடுபணி தேதி" readonly="readonly">
+
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Activity Time / இடுபணி நேரம்<span class="required "> *</span></label>
+                                        <input pInputText type="time" class="form-control"
+                                            formControlName="activity_time"
+                                            [value]="CM_time"
+                                            placeholder="Enter Activity Time / இடுபணி நேரம்" readonly="readonly">
+
+                                    </div>
+                                </div>
+
+                                <div class="row" *ngIf="!editfield" >
+                                    <div class="col-sm-12">
+                                        <label>Activity Description/ இடுபணி விரித்துரைத்தல் <span class="required "> *</span></label>
+                                        <textarea class="form-control" formControlName="description" readonly required [value]="CM_description"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" *ngIf="!editfield">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <label>Activity Type/ இடுபணி மாதிப் படிவம் <span class="required "> *</span></label>
+                                        <input pInputText type="text" class="form-control" formControlName="activity_type" [value]="CM_activity_type"
+                                            placeholder="Enter Activity Type / இடுபணி மாதிப் படிவம்" readonly="readonly">
+                                
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Assigned To / இவர்களுக்கு ஒதுக்கப்பட்டது <span class="required "> *</span></label>
+                                        <input pInputText type="text" class="form-control" formControlName="assigned_to" [value]="CM_assigned_to"
+                                            placeholder="Enter Activity Time / இடுபணி நேரம்" readonly="readonly">
+                                
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row" *ngIf="!editfield">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label>Status/ சமுதாயப் படிநிலை <span class="required "> *</span></label>
+                                        <input pInputText type="text" class="form-control" formControlName="activity_type" [value]="CM_status"
+                                            placeholder="Enter Status/ சமுதாயப் படிநிலை" readonly="readonly">
+                                
+                                    </div>
+                                
+                                </div>
+
+
+                                <!-- <div class="form-group" required>
+                    <label>Select District Name/மாவட்டத்தின் பெயரைத் தேர்ந்தெடுக்கவும்</label>
+                    <select  class="form-control" aria-label="Default select example" formControlName="district">
+                        <option selected>Select District Name/மாவட்டத்தின் பெயரைத் தேர்ந்தெடுக்கவும்</option>
+                        <option value="1">Salem/சேலம்</option>
+                        <option value="2">Namakkal/நாமக்கல்</option>
+                        <option value="3">Chennai/சென்னை</option>
+                    </select>
+                </div> -->
+                                <div *ngIf="editfield" class="d-flex justify-content-center">
+                                    <div style="width:200px">
+                                        <button class="btn btn-danger btn btn-block">Update Meeting</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

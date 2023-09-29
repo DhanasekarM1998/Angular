@@ -1,0 +1,611 @@
+<!-- <link href="assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"> -->
+
+<div *ngIf="spinner==true">
+    <ngx-spinner  size="medium"  type="timer" >
+        <p style="font-size: 20px; color: white;padding-left:7%;">Loading...</p>
+    </ngx-spinner>
+</div>
+<div class="container-fluid" >
+    <div class="card shadow">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <h4 class="font-weight-bold text-dark py">STATE BODY</h4>
+              <div style="width:120px">
+                <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#myModal">Add</button>
+              </div>
+            </div>
+          </div>
+        <div *ngIf="!tableshow" class="d-flex justify-content-center">
+            <div class="loader"></div>
+        </div>
+
+              <div class="modal fade" id="myModal" *ngIf="user_password==null">
+                <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                    <div  style="width:100%;height:100%">
+                        <div class="card-danger">
+                            <div class="card-header">
+                              <h3 class="card-title">Create State Body</h3>
+                              <button type="button" class="close" data-dismiss="modal" (click)="FormReset()">&times;</button>
+                            </div>
+                            <form class="user" [formGroup]='stateadminform' (ngSubmit)="postdata(stateadminform)" autocomplete="off">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <label>First Name / முதல் பெயர்<span class="required "> *</span></label>
+                                            <input type="text" class="form-control form-control" formControlName="firstname"
+                                                placeholder="Enter First Name / முதல் பெயர்" >
+                                                <div *ngIf="stateadminform.get('firstname').status=='INVALID'&& stateadminform.get('firstname').touched==true && stateadminform.get('firstname').value!=''" class="invalid-msg">
+                                                  Numbers and Special charaters not allowed</div>
+                                                <div  *ngIf="(stateadminform.get('firstname').touched && stateadminform.get('firstname').value=='')"
+                                                class="invalid-msg" >Please fill out this field</div>
+                                                <div  class="invalid-msg" *ngIf="stateadminform.get('firstname').untouched" [hidden]='hidden'>Please fill out this field</div>
+
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label>Father Name / தந்தையின் பெயர்<span class="required "> *</span></label>
+                                            <input type="text" class="form-control form-control" formControlName="lastname"
+                                                placeholder="Enter Father Name / தந்தையின் பெயர்">
+                                                <div *ngIf="stateadminform.get('lastname').status=='INVALID'&& stateadminform.get('lastname').touched==true && stateadminform.get('lastname').value!=''" class="invalid-msg">
+                                                  Numbers and Special charaters not allowed</div>
+                                                <div  *ngIf="(stateadminform.get('lastname').touched && stateadminform.get('lastname').value=='')"
+                                                class="invalid-msg" >Please fill out this field</div>
+                                                <div  class="invalid-msg" *ngIf="stateadminform.get('lastname').untouched" [hidden]='hidden'>Please fill out this field</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+
+                                        <!-- <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <label>Designation / பதவி</label><span class="required "> *</span><br>
+                                            <select name="designation" formControlName="designation"  class="form-control">
+                                                <option value="">Select Option</option>
+                                                <option value="Village Deputy Organiser">District President / மாவட்ட தலைவர்</option>
+                                                <option value="Village Deputy Organiser">District Vice President / மாவட்ட துணை தலைவர்</option>
+                                                <option value="District Organiser">District Organiser / மாவட்ட அமைப்பாளர்</option>
+                                                <option value="District Deputy Organiser">District Deputy Organiser / மாவட்ட துணை அமைப்பாளர்</option>
+                                                <option value="Union Organiser">Union Organiser / ஒன்றிய அமைப்பாளர்</option>
+                                                <option value="Union Deputy Organiser">Union Deputy Organiser / ஒன்றிய துணை அமைப்பாளர்</option>
+                                                <option value="City Organiser">City Organiser / நகர அமைப்பாளர்</option>
+                                                <option value="City Deputy Organiser">City Deputy Organiser / நகர துணை அமைப்பாளர்</option>
+                                                <option value="Area Organiser">Area Organiser / பகுதி அமைப்பாளர்</option>
+                                                <option value="Area Deputy Organiser">Area Deputy Organiser / பகுதி துணை அமைப்பாளர்</option>
+                                                <option value="Village Organiser">Village Organiser / ஊரக அமைப்பாளர்</option>
+                                                <option value="Village Deputy Organiser">Village Deputy Organiser / ஊரக துணை அமைப்பாளர்</option>
+                                            </select>
+                                            <div *ngIf="stateadminform.get('designation').hasError('required')"
+                                                class="invalid-msg" [hidden]='hidden'>Please select the Designation
+                                              </div>
+                                        </div> -->
+
+
+
+                                    <div class="col-sm-6">
+                                        <label>Party Designation / கட்சி பதவி<span class="required "> *</span></label>
+                                        <select name="party_designation" formControlName="party_designation"  class="form-control">
+                                            <option value="" disabled selected hidden>Select Option</option>
+                                            <option value="State Engineer Team Leader / மாநில பொறியாளர் அணித் தலைவர்">State Engineer Team Leader / மாநில பொறியாளர் அணித் தலைவர்</option>
+                                            <option value="State Secretary / மாநில செயலாளர்">State Secretary / மாநில செயலாளர்</option>
+                                            <option value="Joint Secretary / இணைச் செயலாளர்">Joint Secretary / இணைச் செயலாளர்</option>
+                                            <option value="Deputy Secretary / துணைச் செயலாளர்">Deputy Secretary / துணைச் செயலாளர்</option>
+                                            </select>
+                                            <div  *ngIf="(stateadminform.get('party_designation').touched && stateadminform.get('party_designation').value=='')"
+                                            class="invalid-msg" >Please select the party designation</div>
+                                            <div  class="invalid-msg" *ngIf="stateadminform.get('party_designation').untouched" [hidden]='hidden'>Please fill out this field</div>
+
+
+                                    </div>
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label>Email Address / மின்னஞ்சல் முகவரி<span class="required "> *</span></label>
+                                        <input type="email" class="form-control form-control" formControlName="email" (keyup)="getemail(stateadminform.get('email').value,'ADD')"
+                                            placeholder="Enter Email Address / மின்னஞ்சல் முகவரி">
+                                            
+                                            <div *ngIf="stateadminform.get('email').status=='INVALID'&& stateadminform.get('email').touched==true && stateadminform.get('email').value!=''" class="invalid-msg">
+                                              Please enter valid email</div>
+                                             
+                                              <div  *ngIf="(stateadminform.get('email').touched && stateadminform.get('email').value=='')"
+                                             class="invalid-msg" >Please fill out this field</div>
+                                           
+                                             <div  class="invalid-msg" *ngIf="stateadminform.get('email').untouched" [hidden]='hidden'>Please fill out this field</div>
+                                           
+                                             <div  class="invalid-msg" *ngIf="test_email=='true' && stateadminform.get('email').value !='' && stateadminform.get('email').status=='VALID'">This email is already exist and please enter new email.</div>
+                                    </div>
+                                     
+
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <label nowrap>Contact Number / தொடர்பு எண்<span class="required "> *</span></label>
+                                            <input type="text" class="form-control form-control" formControlName="contact_no" maxlength="10" placeholder="Enter Contact Number / தொடர்பு எண்">
+    
+                                                <div *ngIf="stateadminform.get('contact_no').status=='INVALID'&& stateadminform.get('contact_no').touched==true && stateadminform.get('contact_no').value!=''" class="invalid-msg">
+                                                  Please enter the valid contact Number</div>
+                                                <div  *ngIf="(stateadminform.get('contact_no').touched && stateadminform.get('contact_no').value=='')"
+                                                class="invalid-msg" >Please fill out this field</div>
+                                                <div  class="invalid-msg" *ngIf="stateadminform.get('contact_no').untouched" [hidden]='hidden'>Please fill out this field</div>
+                                                <!-- <div  class="invalid-msg" *ngIf="test_ph=='true'&& stateadminform.get('contact_no').value !=''">This phone is already exist and please enter new phone.</div> -->
+                                        </div>
+
+                                   
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label nowrap>WhatsApp Number / வாட்ஸ் அப் எண்<span class="required "> *</span></label>
+                                        <input type="text" class="form-control form-control" formControlName="whatsapp_no" maxlength="10" (keyup)="getphone(stateadminform.get('whatsapp_no').value,'ADD')"
+                                            placeholder="Enter WhatsApp Number / வாட்ஸ் அப் எண்">
+
+                                            <div *ngIf="stateadminform.get('whatsapp_no').status=='INVALID'&& stateadminform.get('whatsapp_no').touched==true && stateadminform.get('whatsapp_no').value!=''" class="invalid-msg">
+                                              Please enter the valid Whatsapp Number</div>
+                                           
+                                              <div  *ngIf="(stateadminform.get('whatsapp_no').touched && stateadminform.get('whatsapp_no').value=='')"
+                                            class="invalid-msg" >Please fill out this field</div>
+                                            
+                                            <div  class="invalid-msg" *ngIf="stateadminform.get('whatsapp_no').untouched" [hidden]='hidden'>Please fill out this field</div>
+                                          
+                                            <div  class="invalid-msg" *ngIf="test_ph=='true'&& stateadminform.get('whatsapp_no').value !='' && stateadminform.get('whatsapp_no').status=='VALID'">This phone number is already exist and please enter new phone number</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <label>Status / நிலை<span class="required "> *</span></label><br>
+                                    <select name="approval_status" formControlName="approval_status"  class="form-control">
+                                        <option value="" disabled selected hidden>Select Option</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                    <div *ngIf="stateadminform.get('approval_status').hasError('required')"
+                                    class="invalid-msg" [hidden]='hidden'>Please select the Status
+                                  </div>
+                                </div>
+                                </div>
+                                    <!-- <div class="form-group">
+                                        <label>Select District Name/மாவட்டத்தின் பெயரைத் தேர்ந்தெடுக்கவும்</label>
+                                        <select class="form-control form-select" aria-label="Default select example">
+                                            <option selected>Select District Name/மாவட்டத்தின் பெயரைத் தேர்ந்தெடுக்கவும்</option>
+                                            <option value="1">Salem/சேலம்</option>
+                                            <option value="2">Namakkal/நாமக்கல்</option>
+                                            <option value="3">Chennai/சென்னை</option>
+                                        </select>
+                                    </div> -->
+                                    <div class="form-group row">
+                                        <!-- <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <label>Password / கடவுச்சொல்</label>
+                                            <input type="password" class="form-control form-control" id="password"
+                                            placeholder="Enter Password / கடவுச்சொல்">
+                                        </div> -->
+
+                                        <!-- <div class="col-sm-6">
+                                            <label>Status / நிலை</label>
+                                            <input type="text" class="form-control form-control" formControlName="approval_status"
+                                                id="exampleRepeatPassword" placeholder="Enter Status / நிலை">
+                                        </div> -->
+
+
+
+
+
+                                        <div class="col-6 md:col-6">
+                                            <input type="text" hidden name="mode" formControlName="mode"/>
+                                        </div>
+                                        <div class="col-6 md:col-6">
+                                            <input  type="text" hidden name="location_id" formControlName="location_id"/>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <div  style="width:200px">
+                                            <button  class="btn btn-danger btn btn-block"  data-toggle="modal" data-target="#message"  data-backdrop="false" >Create State Body</button>
+                                        </div>
+                                      </div>
+                                    
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="modal fade" id="showDialogSA">
+                <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                    <div  style="width:100%;height:100%">
+                        <div class="card-danger">
+                            <div class="card-header">
+                              <h3 class="card-title">State Body Information (Non-Editable)</h3>
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <form class="user" [formGroup]='stateadminform' (ngSubmit)="postdata(stateadminform)" autocomplete="off">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <label>First Name / முதல் பெயர்<span class="required "> *</span></label>
+                                            <input type="text" class="form-control form-control" [disabled]="true"
+                                                placeholder="Enter First Name / முதல் பெயர்" [value]="SAfirstname">
+                                                <!-- <div *ngIf="stateadminform.get('firstname').hasError('required') && stateadminform.get('firstname').touched"
+                                                    class="invalid-msg">Please enter the valid field
+                                                </div>
+                                                <div *ngIf="stateadminform.get('firstname').hasError('pattern') && stateadminform.get('firstname').touched"
+                                                    class="invalid-msg">Please enter the valid Name
+                                                </div> -->
+
+
+
+                                                <!-- <div *ngIf="stateadminform.get('firstname').hasError('required') && stateadminform.get('firstname').touched"
+                                                class="invalid-msg">Please enter the valid field
+                                            </div>
+                                            <div *ngIf="stateadminform.get('firstname').hasError('pattern') && stateadminform.get('firstname').touched"
+                                                class="invalid-msg">Please enter the valid Name
+                                            </div>
+                                            <div *ngIf="stateadminform.get('firstname').hasError('required')"
+                                            class="invalid-msg" [hidden]='hidden'>Please enter the Firstname
+                                          </div> -->
+
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label>Father Name / தந்தையின் பெயர்<span class="required "> *</span></label>
+                                            <input type="text" class="form-control form-control" [disabled]="true"
+                                                placeholder="Enter Father Name / தந்தையின் பெயர்" [value]="SAlastname">
+                                                <!-- <div *ngIf="stateadminform.get('lastname').hasError('required') && stateadminform.get('lastname').touched"
+                                                    class="invalid-msg">Please enter the valid field
+                                                </div>
+                                                <div *ngIf="stateadminform.get('lastname').hasError('pattern') && stateadminform.get('lastname').touched"
+                                                   class="invalid-msg">Please enter the valid Name
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                       
+    
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <label>Party Designation / கட்சி பதவி<span class="required "> *</span></label>
+                                    <select  [value]="SAparty_desig" [disabled]="true" class="form-control">
+                                        <option value="">Select Option</option>
+                                        <option value="State Engineer Team Leader / மாநில பொறியாளர் அணித் தலைவர்">State Engineer Team Leader / மாநில பொறியாளர் அணித் தலைவர்</option>
+                                        <option value="State Secretary / மாநில செயலாளர்">State Secretary / மாநில செயலாளர்</option>
+                                        <option value="Joint Secretary / இணைச் செயலாளர்">Joint Secretary / இணைச் செயலாளர்</option>
+                                        <option value="Deputy Secretary / துணைச் செயலாளர்">Deputy Secretary / துணைச் செயலாளர்</option>
+                                        </select>
+
+                                        <!-- <div *ngIf="stateadminform.get('party_designation').hasError('required')"
+                                        class="invalid-msg" [hidden]='hidden'>Please select the Party Designation
+                                      </div> -->
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label>Email Address / மின்னஞ்சல் முகவரி<span class="required "> *</span></label>
+                                        <input type="email" class="form-control form-control" [disabled]="true"
+                                            placeholder="Enter Email Address / மின்னஞ்சல் முகவரி" [value]="SAmail">
+                                            <!-- <div *ngIf="stateadminform.get('email').hasError('required') && stateadminform.get('email').touched"
+                                                class="invalid-msg">Please enter the valid field
+                                            </div>
+                                            <div *ngIf="stateadminform.get('email').hasError('pattern') && stateadminform.get('email').touched"
+                                                class="invalid-msg">Please enter the valid Email Id
+                                            </div> -->
+                                        </div>
+                                    
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <label>Contact Number / தொடர்பு எண்<span class="required "> *</span></label>
+                                            <input type="text" class="form-control form-control" formcontrollerName="contact_no1"    [value]="SAcontact_no" [disabled]="true"
+                                                placeholder="Enter Contact Number / தொடர்பு எண்">
+    
+                                                <!-- <div *ngIf="stateadminform.get('whatsapp_no').hasError('required') && stateadminform.get('whatsapp_no').touched"
+                                                class="invalid-msg">Please enter the valid field
+                                            </div>
+                                            <div *ngIf="stateadminform.get('whatsapp_no').hasError('pattern') && stateadminform.get('whatsapp_no').touched"
+                                                class="invalid-msg">Please enter the valid WhatsApp Number
+                                            </div>
+                                            <div *ngIf="stateadminform.get('whatsapp_no').hasError('required')"
+                                                class="invalid-msg" [hidden]='hidden'>Please enter the WhatsApp Number
+                                            </div> -->
+                                        </div>
+                                        
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <label>WhatsApp Number / வாட்ஸ் அப் எண்<span class="required "> *</span></label>
+                                            <input type="text" class="form-control form-control" [value]="SAwhatsapp_no" [disabled]="true"
+                                                placeholder="Enter WhatsApp Number / வாட்ஸ் அப் எண்">
+    
+                                                <!-- <div *ngIf="stateadminform.get('whatsapp_no').hasError('required') && stateadminform.get('whatsapp_no').touched"
+                                                class="invalid-msg">Please enter the valid field
+                                            </div>
+                                            <div *ngIf="stateadminform.get('whatsapp_no').hasError('pattern') && stateadminform.get('whatsapp_no').touched"
+                                                class="invalid-msg">Please enter the valid WhatsApp Number
+                                            </div>
+                                            <div *ngIf="stateadminform.get('whatsapp_no').hasError('required')"
+                                                class="invalid-msg" [hidden]='hidden'>Please enter the WhatsApp Number
+                                            </div> -->
+                                        </div>
+    
+                                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <label>Status / நிலை<span class="required "> *</span></label><br>
+                                                <select   class="form-control form-control" [disabled]="true" [value]="SAstatus">
+                                                    <option value="">Select Option</option>
+                                                    <option value="Active">Active</option>
+                                                    <option value="Inactive">Inactive</option>
+                                                </select>
+                                            </div>
+
+                                </div>
+                                    <!-- <div class="form-group">
+                                        <label>Select District Name/மாவட்டத்தின் பெயரைத் தேர்ந்தெடுக்கவும்</label>
+                                        <select class="form-control form-select" aria-label="Default select example">
+                                            <option selected>Select District Name/மாவட்டத்தின் பெயரைத் தேர்ந்தெடுக்கவும்</option>
+                                            <option value="1">Salem/சேலம்</option>
+                                            <option value="2">Namakkal/நாமக்கல்</option>
+                                            <option value="3">Chennai/சென்னை</option>
+                                        </select>
+                                    </div> -->
+                                    <div class="form-group row">
+                                        <!-- <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <label>Password / கடவுச்சொல்</label>
+                                            <input type="password" class="form-control form-control" id="password"
+                                            placeholder="Enter Password / கடவுச்சொல்">
+                                        </div> -->
+
+
+                                        <div class="col-6 md:col-6">
+                                            <input type="text" hidden name="mode" formControlName="mode"/>
+                                        </div>
+                                        <div class="col-6 md:col-6">
+                                            <input  type="text" hidden name="location_id" formControlName="location_id"/>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="col-3" style="margin-left:34%;">
+                                        <button class="btn btn-danger btn btn-block">Create State Admin</button>
+                                    </div> -->
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="modal fade" id="modal-xl">
+                <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                    <div class="card-danger">
+                          <div class="card-header">
+                            <h3 class="card-title">Edit State Body Information</h3>
+                            <button type="button" class="close" data-dismiss="modal" (click)="FormReset()">&times;</button>
+                          </div>
+                          <form class="user"  [formGroup]='editform' (ngSubmit)="updatedata(editform)" autocomplete="off">
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label>First Name / முதல் பெயர்<span class="required "> *</span></label>
+                                        <input type="text" class="form-control form-control"  formControlName="firstname1"
+                                            placeholder="Enter First Name / முதல் பெயர்" >
+
+                                            <div *ngIf="editform.get('firstname1').status=='INVALID'&& editform.get('firstname1').touched==true && editform.get('firstname1').value!=''" class="invalid-msg">
+                                              Numbers and Special charaters not allowed</div>
+                                            <div  *ngIf="(editform.get('firstname1').touched && editform.get('firstname1').value=='')"
+                                            class="invalid-msg" >Please fill out this field</div>
+
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Father Name / தந்தையின் பெயர்<span class="required "> *</span></label>
+                                        <input type="text" class="form-control form-control" formControlName="lastname1"
+                                            placeholder="Enter Father Name / தந்தையின் பெயர்" >
+
+                                            <div *ngIf="editform.get('lastname1').status=='INVALID'&& editform.get('lastname1').touched==true && editform.get('lastname1').value!=''" class="invalid-msg">
+                                              Numbers and Special charaters not allowed</div>
+                                            <div  *ngIf="(editform.get('lastname1').touched && editform.get('lastname1').value=='')"
+                                            class="invalid-msg" >Please fill out this field</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                <!-- <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <label>Designation / பதவி</label>
+                                    <input type="text" class="form-control form-control" formControlName="designation1"
+                                        placeholder="Enter Designation / பதவி" >
+                                </div> -->
+
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <label>Party Designation / கட்சி பதவி<span class="required "> *</span></label>
+                                    <select formControlName="party_designation1" class="form-control">
+                                        <option value="" disabled selected hidden>Select Option</option>
+                                        <option value="State Engineer Team Leader / மாநில பொறியாளர் அணித் தலைவர்">State Engineer Team Leader / மாநில பொறியாளர் அணித் தலைவர்</option>
+                                        <option value="State Secretary / மாநில செயலாளர்">State Secretary / மாநில செயலாளர்</option>
+                                        <option value="Joint Secretary / இணைச் செயலாளர்">Joint Secretary / இணைச் செயலாளர்</option>
+                                        <option value="Deputy Secretary / துணைச் செயலாளர்">Deputy Secretary / துணைச் செயலாளர்</option>
+                                        </select>
+
+
+                                    </div>
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label>Email Address / மின்னஞ்சல் முகவரி<span class="required "> *</span></label>
+                                        <input type="email" class="form-control form-control" formControlName="email1" (keyup)="getemail(editform.get('email1').value,'EDIT')"
+                                            placeholder="Enter Email Address / மின்னஞ்சல் முகவரி">
+    
+                                            <div *ngIf="editform.get('email1').status=='INVALID'&& editform.get('email1').touched==true && editform.get('email1').value!=''" class="invalid-msg">
+                                              Please enter valid Email Id</div>
+                                            <div  *ngIf="(editform.get('email1').touched && editform.get('email1').value=='')"
+                                            class="invalid-msg" >Please fill out this field</div>
+                                            <div  class="invalid-msg" *ngIf="test_email1=='true'&& editform.get('email1').status=='VALID'">This email is already exist and please enter new email.</div>
+                                    </div>
+
+                                    
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label>Contact Number / தொடர்பு எண்<span class="required "> *</span></label>
+                                        <input type="text" class="form-control form-control" formControlName="contact_no1" maxlength="10"
+                                            placeholder="Enter Contact Number / தொடர்பு எண்">
+
+                                            <div *ngIf="editform.get('contact_no1').status=='INVALID'&& editform.get('contact_no1').touched==true && editform.get('contact_no1').value!=''" class="invalid-msg">
+                                              Please enter valid contact number</div>
+                                            <div  *ngIf="(editform.get('contact_no1').touched && editform.get('contact_no1').value=='')"
+                                            class="invalid-msg" >Please fill out this field</div>
+                                            <!-- <div  class="invalid-msg" *ngIf="test_ph1=='true'  && editform.get('contact_no1').value !='' ">This phone is already exist and please enter new phone.</div> -->
+
+                                    </div>
+
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <label>WhatsApp Number / வாட்ஸ் அப் எண்<span class="required "> *</span></label>
+                                        <input type="text" class="form-control form-control" formControlName="whatsapp_no1" maxlength="10" (keyup)="getphone(editform.get('whatsapp_no1').value,'EDIT')"
+                                            placeholder="Enter WhatsApp Number / வாட்ஸ் அப் எண்">
+
+                                            <div *ngIf="editform.get('whatsapp_no1').status=='INVALID'&& editform.get('whatsapp_no1').touched==true && editform.get('whatsapp_no1').value!=''" class="invalid-msg">
+                                              Please enter valid Whatsapp Number</div>
+                                            <div  *ngIf="(editform.get('whatsapp_no1').touched && editform.get('whatsapp_no1').value=='')"
+                                            class="invalid-msg" >Please fill out this field</div>
+                                            <div  class="invalid-msg" *ngIf="test_ph1=='true'  && editform.get('whatsapp_no1').value !='' && editform.get('whatsapp_no1').status=='VALID' ">This phone number is already exist and please enter new phone number</div>
+
+                                    </div>
+                                    </div>
+                            
+                            <div class="form-group row">   
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <label>Status / நிலை<span class="required "> *</span></label><br>
+                                    <select formControlName="approval_status1"  class="form-control">
+                                        <option value="" disabled selected hidden>Select Option</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                    <div *ngIf="editform.get('approval_status1').hasError('required')"
+                                    class="invalid-msg">Please select the Status
+                                  </div>
+                                </div>
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <label>Login Lock Status / உள்நுழைவு பூட்டு நிலை </label><span class="required "> *</span><br>
+                                    <select name="profile_status" formControlName="profile_status1"
+                                        class="form-control">
+                                        <option value="">Select Option</option>
+                                        <option value="0">Unlock</option>
+                                        <option value="1">lock</option>
+                                    </select>
+                                    <!-- <div *ngIf="editform.get('approval_status1').hasError('required')"
+                                    class="invalid-msg">Please fill out this field
+                                  </div> -->
+                                </div>
+                            </div>
+                              <div class="d-flex justify-content-center">
+                                <div  style="width:200px">
+                                    <button class="btn btn-danger btn btn-block">Update State Body</button>
+                                </div>
+                              </div>
+                             
+                            </div>
+                        </form>
+
+                     </div>
+                  </div>
+                </div>
+            </div>
+
+
+<!-- State ADMIN DATATABLE         -->
+<div class="wrapper">
+        <div class="card-body">
+            <div class="table-responsive" *ngIf="tableshow">
+                <!-- TABLE -->
+                    <table class="table table-bordered display" [dtOptions]="dtOptions"  datatable width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Party Designation</th>
+                            <th>Status</th>
+                            <th>Email</th>
+                            <th data-ordering="false">Show</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let customer of customers[0]">
+                            <td style="min-width: 20px;">
+                            {{customer.name}}
+                            </td>
+                            <td style="min-width: 20px;">
+                            {{customer.party_designation}}
+                            </td>
+                            <td style="min-width: 20px;">
+                            {{customer.approval_status}}
+                            </td>
+                            <td style="min-width: 20px;">
+                            {{customer.email}}
+                            </td>
+                            <td><a data-toggle="modal" data-target="#showDialogSA" class="btn btn-primary btn-circle btn-sm" (click)="editbuttonviewSA(customer)">
+                                <i class="fas fa-flag"></i>
+                            </a></td>
+                            <td><a data-toggle="modal" data-target="#modal-xl" class="btn btn-info btn-circle btn-sm" (click)="editbuttonviewSA(customer);get_oldmail(customer)">
+                                <i class="fas fa-check"></i>
+                            </a></td>
+                            <td><a  class="btn btn-danger btn-circle btn-sm" (click)="delete_sa(customer.id)">
+                                <i class="fas fa-trash"></i>
+                            </a></td>
+                        </tr>
+                    </tbody>
+               </table>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+
+</div>
+
+
+
+
+<div class="modal fade show" id="message" *ngIf="stateadminform.status=='VALID' && test_email=='false'&& test_ph=='false'" >
+    <div class="modal-dialog modal-m"  style="margin-top:10%;">
+        <div class="modal-content">
+
+            <div style="width:100%;height:200%">
+                <div class="card-danger" style="width:100%;height:200%">
+                    <div class="card-header">
+
+
+                        <h3 class="card-title">State Body Login Credentials</h3>
+                        <!-- <button type="button" class="close" data-dismiss="modal" *ngIf="user_password==null">&times;</button> -->
+                    </div>
+
+                        <div class="card-body" >
+
+
+                            <label>Please access the portal using the following details</label>
+                            <div class="form-group row">
+                                <div class="col-12">
+                                <label>Application Link : </label> <a href="https://app.dmkengwing.in" target="_blank" class="link-danger"> https://app.dmkengwing.in</a>
+
+                                <div class="loader-container">
+                                <div *ngIf="user_password==null"class="loader"></div>
+                                   </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label>Username :</label> {{username}}
+                                   <div>
+                                    <!-- <label type="text"  class="form-control"
+                                        placeholder="Enter First Name / முதல் பெயர்99" [value]="username"></label> -->
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label>Password :</label> {{user_password}}
+
+                                   <div>
+
+
+
+                                    <div class="col-6 align-center" style="margin-left:43%;">
+                                        <button class="btn btn-danger btn btn-block" style="height:40px;width:50px" (click)="reload()" *ngIf="username!=null">Ok</button>
+                                    </div>
+                                </div>
+
+                </div>
+                            </div>
+
+                        </div>
+    </div>
+</div>

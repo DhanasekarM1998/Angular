@@ -1,0 +1,21 @@
+.ng-touched.ng-dirty.ng-invalid{
+    border-color: red;
+}
+.ng-touched.ng-dirty.ng-valid{
+    border-color: green;
+}
+.invalid-msg{
+    margin: 5px;
+    margin-top:10px;
+    color:red;
+}
+.show_popup {
+    width: 50%;
+    height: 70%;
+} 
+.required {
+        content:" *";
+        color: red;
+      }
+
+     

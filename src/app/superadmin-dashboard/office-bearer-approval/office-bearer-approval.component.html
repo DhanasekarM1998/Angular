@@ -1,0 +1,78 @@
+<!-- <link href="assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet"> -->
+<div class="container-fluid" >
+  <div class="card shadow">
+    <div class="card-header d-flex justify-content-between">
+      <h4 class="font-weight-bold text-dark py">OFFICE BEARER APPROVAL</h4>
+      <!-- <div class="col-2" style="margin-left:67%">
+          <button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#myModal">Add</button>
+      </div> -->
+      
+      
+  </div>
+  <div *ngIf="!tableshow" class="d-flex justify-content-center">
+    <div  class="loader"></div>
+  </div>
+      
+
+      
+      
+      
+
+      
+
+
+
+            
+
+      
+<!-- OFFICE BEARER DATATABLE         -->
+<div class="card-body">
+  <div class="table-responsive" *ngIf="tableshow">
+      <!-- TABLE -->
+          <table class="table table-bordered display" [dtOptions]="dtOptions" datatable width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                  <th>Email</th>
+                  <th>New Designation</th>
+                  <th>Old Designation</th>
+                  <th>Request Date</th>
+                  <th>Comments</th>
+                  <th>Approve</th>
+                  <th>Reject</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let customer of customers">
+                  <td style="min-width: 20px;">
+                    {{customer.email_id}}
+                  </td>
+                  <td style="min-width: 20px;">
+                    {{customer.new_designation}}
+                  </td>
+                  <td style="min-width: 20px;">
+                    {{customer.old_designation}}
+                  </td>
+                  <td style="min-width: 20px;">
+                    {{customer.date}}
+                  </td>
+                  <td style="min-width: 20px;">
+                    {{customer.reason}}
+                  </td>
+                  <td><a  class="btn btn-info btn-circle btn-sm" (click)="approve_role_change(customer.user_maser_id,customer.new_designation,'approve')">
+                      <i class="fas fa-check"></i>
+                  </a></td>
+                  <td><a  class="btn btn-danger btn-circle btn-sm" (click)="approve_role_change(customer.user_maser_id,customer.new_designation,'reject')" >
+                      <i class="fas fa-ban"></i>
+                  </a></td>
+                </tr>
+            </tbody>
+            
+          </table>
+  </div>
+</div>
+  
+</div>
+
+</div>
+

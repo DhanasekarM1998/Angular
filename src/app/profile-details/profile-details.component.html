@@ -1,0 +1,386 @@
+
+<div *ngIf="spinner==true">
+  <ngx-spinner size="medium" type="timer">
+    <p style="font-size: 20px; color: white;padding-left:7%;">Loading...</p>
+  </ngx-spinner>
+</div>
+<div class="container-fluid" >
+  <div class="card shadow">
+<div class="card-header">
+  <div class="d-flex justify-content-between">
+    <h4 class="font-weight-bold text-dark py text-center">PROFILE</h4>
+  </div>
+  </div>
+  <div class="wrapper" >  
+      <div class="card-body">
+        <div class="form-group row">
+          <div class="col-sm-6 mb-3 mb-sm-0">
+            <label>Party District / கட்சி மாவட்டம்<span class="required "> *</span></label><br>
+            <!-- <select class="form-control"  [(ngModel)]="district" (click)="Constituency_selection(district)">
+                      <option value="" selected disabled hidden>Select District</option>
+                      <option *ngFor="let option of district_list" (value)="option" >
+                        {{option}}</option>
+                    </select> -->
+            <input type="text" name="district" [(ngModel)]="district" class="form-control"
+              placeholder="Party District / கட்சி மாவட்டம்" readonly="readonly" />
+          </div>
+
+          <div class="col-sm-6">
+            <label>Assembly constituency / சட்டமன்ற தொகுதி<span class="required "> *</span></label><br>
+            <select class="form-control" [(ngModel)]="constituency">
+              <option value="" selected disabled hidden>Select constituency</option>
+              <option *ngFor="let option of user_constituency" [value]="option">
+                {{option}}</option>
+            </select>
+          
+            <div class="invalid-msg" *ngIf="!constituency" [hidden]='hidden'>Select Constituency
+            </div>
+          
+          </div>
+        </div>
+        
+
+
+        <form [formGroup]='officebearerform' (ngSubmit)="postdata(officebearerform)" autocomplete="off">
+          <!-- <div class="form-group row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <label>மாவட்டம் / மாநகரம் / ஒன்றியம் / நகரம் / பகுதி / பேரூர்
+                <span class="required "> *</span></label><br>
+              <select name="applied_posting" class="form-control" formControlName="applied_posting"
+              (change)="getPostingDropdown(officebearerform.value.applied_posting)">
+                <option value="" selected disabled hidden>Select Option</option>
+
+                <option value="மாவட்டம்">மாவட்டம்</option>
+                <option value="மாநகரம்">மாநகரம்</option>
+                <option value="ஒன்றியம்">ஒன்றியம்</option>
+                <option value="நகரம்">நகரம்</option>
+                <option value="பகுதி">பகுதி</option>
+                <option value="பேரூர்">பேரூர்</option>
+
+              </select>
+
+              <div *ngIf="officebearerform.get('applied_posting').hasError('required')" class="invalid-msg"
+                [hidden]='hidden'>Please fill out this field
+              </div>
+
+
+            </div>
+            <div class="col-sm-6">
+              <label>மாவட்ட பொறியாளர் அணி பொறுப்பு<span class="required "> *</span></label><br>
+              <select name="applied_role" class="form-control" formControlName="applied_role" (click)="nopost_msg()" (change)="onSelectChange($event)">
+
+                <option value="" selected disabled hidden>Select Option</option>
+                <option *ngFor="let option of dropdown_list" (value)="option" >
+                  {{option}}</option>
+                
+              </select>
+
+              <div class="invalid-msg"
+                *ngIf="dropdown_list=='' && nopost_Error_msg==true && applied_posting.value!='';else err">It seems all the posts for this district has been filled.<br> You cannot create Office bearer for this district.
+               </div>
+               <ng-template #err>
+                <div *ngIf="officebearerform.get('applied_role').hasError('required')" class="invalid-msg"
+                [hidden]='hidden'>Please fill out this field  </div>
+              </ng-template>        
+                
+
+            </div>
+          </div> -->
+          <div class="form-group row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <label>First Name / முதல் பெயர்<span class="required "> *</span></label>
+              <input type="text" name="firstname" class="form-control" placeholder="Enter First Name / முதல் பெயர்"
+                formControlName="firstname" />
+              <div *ngIf="firstname.status=='INVALID'&& firstname.touched==true && firstname.value!=''"
+                class="invalid-msg">
+                Numbers and Special charaters not allowed</div>
+              <div *ngIf="(officebearerform.get('firstname').touched && firstname.value=='')" class="invalid-msg">
+                Please fill this gowtham field</div>
+              <div class="invalid-msg" *ngIf="officebearerform.get('firstname').untouched  && firstname.value==''" [hidden]='hidden'>
+                Please fill this saravanan field</div>
+            </div>
+            <div class="col-sm-6">
+              <label>Father Name / தந்தையின் பெயர்<span class="required "> *</span></label>
+              <input type="text" name="lastname" class="form-control"
+                placeholder="Enter Father Name / தந்தையின் பெயர்" formControlName="lastname" (keyup)="showfathername(officebearerform.get('lastname').value)"/>
+              <div *ngIf="lastname.status=='INVALID'&& lastname.touched==true && lastname.value!=''"
+                class="invalid-msg">
+                Numbers and Special charaters not allowed</div>
+              <div *ngIf="(officebearerform.get('lastname').touched && lastname.value=='')" class="invalid-msg">
+                Please fill this field</div>
+              <div class="invalid-msg" *ngIf="officebearerform.get('lastname').untouched && lastname.value==''" [hidden]='hidden'>Please
+                fill this field</div>
+
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <label>Date of Birth / பிறந்த தேதி<span class="required "> *</span></label>
+              <input type="date" name="date_of_birth" class="form-control" placeholder="Enter Date of Birth"
+                [(ngModel)]="date_of_birth" (ngModelChange)="calculateAge()" formControlName="date_of_birth" 
+                max="{{minAge1 | date:'yyyy-MM-dd'}}" />
+              <!-- <div  *ngIf="date_of_birth.touched && date_of_birth.value==''"
+                            class="invalid-msg" >Please fill this field</div> -->
+              <!-- <div class="invalid-msg" *ngIf="!date_of_birth && hidden==false">Please fill this field</div> -->
+              <div  *ngIf="(officebearerform.get('date_of_birth').touched && date_of_birth=='')"
+              class="invalid-msg" >Please fill this field</div>
+              <div  class="invalid-msg" *ngIf="officebearerform.get('date_of_birth').untouched && date_of_birth==''" [hidden]='hidden'>Please fill this field</div>
+            </div>
+            <div class="col-sm-6">
+              <label>Age / வயது<span class="required "> *</span></label>
+              <input type="number" name="age" class="form-control age" [(ngModel)]="age" min="18" max="100"
+                placeholder="Age / வயது" formControlName="age" readonly />
+              <span *ngIf="age<18" class="invalid-msg">Age must be 18 or above</span>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <label>Father Name / தந்தையின் பெயர்<span class="required "> *</span></label>
+              <input type="text" name="father_name" class="form-control"
+                placeholder="Enter Father Name / தந்தையின் பெயர்" readonly="readonly" value="{{ln}}"
+                formControlName="father_name" />            
+            </div>
+            <div class="col-sm-6">
+              <label>Mother Name / தாய் பெயர்</label>
+              <input type="text" name="mother_name" class="form-control"
+                placeholder="Enter Mother Name / தாய் பெயர்" formControlName="mother_name" />
+              <div *ngIf="mother_name.status=='INVALID'&& mother_name.touched==true " class="invalid-msg">
+                Numbers and Special charaters not allowed</div>
+                              <!-- <div  *ngIf="(officebearerform.get('mother_name').touched && mother_name.value=='')"
+                              class="invalid-msg" >Please fill this field</div> -->
+              <!-- <div  class="invalid-msg" *ngIf="officebearerform.get('mother_name').untouched" [hidden]='hidden'>Please fill this field</div> -->
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <label>Degree / கல்வித் தகுதி<span class="required "> *</span></label>
+              <!-- <input type="text" name="educational_qualification" class="form-control"  placeholder="Enter Degree / கல்வித் தகுதி" formControlName="educational_qualification"/> -->
+                   
+              <select name="educational_qualification" formControlName="educational_qualification"  class="form-control">
+                <option value="" selected disabled>Select Option</option>
+                <option value="B.E">B.E</option>
+                <option value="DIPLOMA">DIPLOMA</option>                                     
+            </select>
+              
+              
+              <!-- <div *ngIf="educational_qualification.status=='INVALID'&& educational_qualification.touched==true && educational_qualification.value!=''" class="invalid-msg">
+                      Numbers and Special charaters not allowed</div> -->
+                    <div  *ngIf="(officebearerform.get('educational_qualification').touched && officebearerform.get('educational_qualification').value=='')"
+                    class="invalid-msg" >Please fill this field</div>
+                    <div  class="invalid-msg" *ngIf="officebearerform.get('educational_qualification').untouched && officebearerform.get('educational_qualification').value==''" [hidden]='hidden'>Please fill this field</div>
+            </div>
+
+            <div class="col-sm-6">
+              <label>Degree Major / கல்வித் தகுதியின் பிரிவு<span class="required "> *</span></label>
+              <!-- <input type="text" class="form-control form-control" formControlName="profession"
+                  placeholder="Enter Degree Major / கல்வி தகுதின் பிரிவு"> -->
+                  <select name="degree_major" [(ngModel)]="educationOptions" formControlName="degree_major" (click)="degree_major_role=='true'" placeholder="Select Option" class="form-control">
+                      <option *ngIf=" degree_major_role=='false'"   value="" selected disabled>Select Option</option>
+                      <option value="CIVIL">CIVIL</option>
+                      <option value="CSE">CSE</option>
+                      <option value="ECE">ECE</option>
+                      <option value="EEE">EEE</option>
+                      <option value="MECH">MECH</option>
+                      <option value="IT">IT</option>
+                      <option value="OTHERS">OTHERS</option>
+                  </select>
+                  <div  class="invalid-msg"  *ngIf="officebearerform.get('degree_major').untouched && officebearerform.get('degree_major').value==''" [hidden]='hidden'>Please fill this field</div>
+                  <br/>
+                      <!-- <input *ngIf="educationOptions === 'OTHERS'" type="text" class="form-control col-sm-6 mb-3 mb-sm-0" id="additional_qualification" ngModel name="additional_qualification"> -->
+                      <input *ngIf="educationOptions === 'OTHERS'" class="form-control col-sm-13 mb-3 mb-sm-0" name="other_qualification" formControlName="other_qualification" type="text" placeholder="Enter Degree Major / கல்வித் தகுதியின் பிரிவு">
+                      <div  *ngIf="educationOptions === 'OTHERS' && officebearerform.get('other_qualification').value=='' && officebearerform.get('other_qualification').touched"
+                      class="invalid-msg" [hidden]='!hidden'>Please fill this field</div>
+                      <div  class="invalid-msg" *ngIf="educationOptions === 'OTHERS' && officebearerform.get('other_qualification').value==''" [hidden]='hidden'>Please fill this field</div>
+              
+          </div> 
+        </div>  
+          <div class="form-group row">
+
+            <div class="col-sm-6">
+              <label>Additional Degree / சிறப்பு தகுதி</label>
+              <input type="text" name="additional_qualification" class="form-control"  placeholder="Enter Additional Degree / சிறப்பு தகுதி" formControlName="additional_qualification"/>
+              <div *ngIf="additional_qualification.status=='INVALID'&& additional_qualification.touched==true " class="invalid-msg">
+                Numbers and Special charaters not allowed</div>
+                    <!-- <div  class="invalid-msg" *ngIf="officebearerform.get('additional_qualification').untouched" [hidden]='hidden'>Please fill this field</div> --> 
+            </div>
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <label>Email / மின்னஞ்சல்<span class="required "> *</span></label>
+              <input type="text" name="email" class="form-control"  placeholder="Enter Email / மின்னஞ்சல்" formControlName="email"  (keyup)="getemail(officebearerform.get('email').value,'ADD')"/>
+               
+                  <div *ngIf="email.status=='INVALID'&& email.touched==true && email.value!=''" class="invalid-msg">
+                    Please enter the valid Email Id</div>
+                  <div  *ngIf="(officebearerform.get('email').touched && email.value=='')"
+                  class="invalid-msg" >Please fill this field</div>
+                  <div  class="invalid-msg" *ngIf="officebearerform.get('email').untouched && email.value==''" [hidden]='hidden'>Please fill this field</div>
+                  <div  class="invalid-msg" *ngIf="test_email=='true' && officebearerform.get('email').value !=''">This email is already exist and please enter new email.</div>
+                </div>
+        </div>
+
+        <div class="form-group row">
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label>Phone Number / தொலைபேசி எண்<span class="required "> *</span></label>
+                  <input type="text" name="contact_no" class="form-control"  placeholder="Enter Phone Number / தொலைபேசி எண்" maxlength="10" formControlName="contact_no"/>
+                      <div *ngIf="contact_no.status=='INVALID'&& contact_no.touched==true && contact_no.value!=''" class="invalid-msg">
+                        Please enter the valid phone number</div>
+                      <div  *ngIf="(officebearerform.get('contact_no').touched && contact_no.value=='')"
+                      class="invalid-msg" >Please fill this field</div>
+                      <div  class="invalid-msg" *ngIf="officebearerform.get('contact_no').untouched && contact_no.value==''" [hidden]='hidden'>Please fill this field</div>
+                 
+                </div>
+                <div class="col-sm-6">
+                  <label>Whatsapp Number / வாட்ஸ்அப் எண்<span class="required "> *</span></label>
+                  <input type="text" name="whatsapp_no" class="form-control"  placeholder="Enter Whatsapp Number /வாட்ஸ்அப் எண்" maxlength="10" formControlName="whatsapp_no"  [readonly]="isWhatsAppNumberDisabled"  (keyup)="getphone(officebearerform.get('whatsapp_no').value,'ADD')"/>
+                        <div *ngIf="whatsapp_no.status=='INVALID'&& whatsapp_no.touched==true && whatsapp_no.value!=''" class="invalid-msg">
+                          Please enter the valid WhatsApp Number</div>
+                          <div  *ngIf="(officebearerform.get('whatsapp_no').touched && whatsapp_no.value=='' && officebearerform.get('whatsapp_no').hasError('pattern'))"
+                          class="invalid-msg" >Please fill this field</div>
+                        <div  class="invalid-msg" *ngIf="officebearerform.get('whatsapp_no').untouched && whatsapp_no.value==''" [hidden]='hidden'>Please fill this field</div>
+                        <!-- <span *ngIf="officebearerform.get('whatsapp_no').errors?.['minlength'] || officebearerform.get('whatsapp_no').errors?.['maxlength']">10 digit number required</span> -->
+                        <div  class="invalid-msg" *ngIf="test_ph=='true'&& officebearerform.get('whatsapp_no').value !=''">This phone number is already exist and please enter new phone.</div>
+                      </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-6 mb-3 mb-sm-0">
+            <label>
+              Facebook ID / முகநூல் ஐடி
+              </label>
+            <input type="text" name="fb_id" class="form-control" placeholder="Enter Facebook ID / முகநூல் ஐடி"
+              formControlName="fb_id" />
+           
+          </div>
+          <div class="col-sm-6">
+            <label>Twitter ID / ட்விட்டர் ஐடி</label>
+            <input type="text" name="twitter_id" class="form-control"
+              placeholder="Enter Twitter ID / ட்விட்டர் ஐடி" formControlName="twitter_id" />
+            
+
+          </div>
+        </div>
+        <div class="form-group row">
+              
+              <div class="col-sm-12">
+                <label>Profession / தொழில்,வேலை</label>
+                <textarea pInputText type="text" class="form-control" name="profession"  placeholder="Enter Profession / தொழில்,வேலை" formControlName="profession"></textarea>
+                <div *ngIf="profession.status=='INVALID'&& profession.touched==true " class="invalid-msg">
+                  Numbers and Special charaters not allowed</div>
+                   <!-- <div  class="invalid-msg" *ngIf="officebearerform.get('profession').untouched" [hidden]='hidden'>Please fill this field</div> -->
+
+              </div>
+</div>
+          
+          <div class="form-group row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <label>Door no or Flat no / கதவு எண் அல்லது பிளாட் எண்</label>
+              <input pInputText name="address" class="form-control"
+                placeholder="Door no or Flat no / கதவு எண் அல்லது பிளாட் எண்" formControlName="flat_no" />
+
+            </div>
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <label>Street name / தெருவின் பெயர்</label>
+              <input pInputText name="street_name" class="form-control" placeholder="Street name / தெருவின் பெயர்"
+                formControlName="street_name" />
+
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <label>Town or City / நகரம்</label>
+              <input pInputText name="town_city" class="form-control" placeholder="Town or City / நகரம்"
+                formControlName="town_city" />
+
+            </div>
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <label>Taluk / தாலுக்கா</label>
+              <input pInputText name="taluk" class="form-control" placeholder="Taluk / தாலுக்கா"
+                formControlName="taluk" />
+
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <label>Pincode / அஞ்சல் குறியீடு</label>
+              <input pInputText name="pincode" class="form-control" placeholder="Pincode / அஞ்சல் குறியீடு" maxlength="6"
+                formControlName="pincode" /> 
+                <div *ngIf="pincode.status=='INVALID'&& pincode.touched==true " class="invalid-msg">
+                  Please enter valid pincode</div>
+
+            </div>
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <label>Status / நிலை<span class="required "> *</span></label><br>
+              <select name="approval_status" formControlName="approval_status" class="form-control">
+                <option value="" disabled selected hidden>Select Option</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              <div  *ngIf="(officebearerform.get('approval_status').touched && officebearerform.get('approval_status').value=='')"
+                  class="invalid-msg" >Please fill this field</div>
+                  <div  class="invalid-msg" *ngIf="officebearerform.get('approval_status').untouched && officebearerform.get('approval_status').value==''" [hidden]='hidden'>Please fill this field</div>
+            </div>
+          </div>
+          <div class="form-group row">
+
+            <div class="col-sm-12 mb-3 mb-sm-0">
+              <label>Comments</label>
+              <textarea name="party_comments" pInputText class="form-control" placeholder="Enter Comments"
+                cols="100" rows="5" formControlName="party_comments"></textarea>
+              <!-- <div  *ngIf="(officebearerform.get('party_comments').touched && party_comments.value=='')"
+                                class="invalid-msg" >Please fill this field</div>
+                                <div  class="invalid-msg" *ngIf="officebearerform.get('party_comments').untouched" [hidden]='hidden'>Please fill this field</div> -->
+            </div>
+          </div>
+          <div *ngIf="imageField" class="form-group row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                <label>Photo<span class="required "> *</span></label>
+                <input
+                type="file"
+                name="images"
+                class="form-control"
+                accept="image/*"
+                (change)="onFileChange($event, 'create')">
+                <div *ngIf="!imageSrc"
+                  class="invalid-msg" [hidden]='hidden'>Please fill out this field
+                  </div>
+              <div *ngIf="fileFormatStatus" class="invalid-msg" >
+                Only allowed extensions are .png .jpeg .jpg</div>
+              <div *ngIf="fileSizeStatus" class="invalid-msg" >
+                Maximum allowed file size is 60KB</div>
+              
+
+            </div>
+
+            <img [src]="imageSrc"   *ngIf="imageSrc" style="height: 190px; width:160px; border: 1px solid #555; " >
+
+          </div>
+
+          <div class="form-group row">
+
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <input type="text"  hidden formControlName="mode" />
+            </div>
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              <input type="text"   hidden formControlName="location_id" />
+            </div>
+          </div>
+          <!-- <div class="form-group">
+                      <div class="col-6 md:col-6">
+                        <label>Status / நிலை</label>
+                        <input pInputText type="text" hidden class="form-control" name="mode" formControlName="mode"/>
+                      </div>
+                      <div class="col-6 md:col-6">
+                        <label>Status / நிலை</label>
+                        <input pInputText type="text" hidden class="form-control" name="location_id" formControlName="location_id"/>
+                      </div>
+                  </div> -->
+          <div class="d-flex justify-content-center">
+            <div style="width:200px">
+              <button class="btn btn-danger btn btn-block" data-toggle="modal" data-target="#message" 
+                data-backdrop="false">Update Profile</button>
+            </div>           
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
